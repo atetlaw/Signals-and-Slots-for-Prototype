@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+/*
+ * Signals and Slots for Prototype: Easy custom javascript events
+ * http://tetlaw.id.au/view/blog/signals-and-slots-for-prototype-easy-custom-javascript-events
+ * Andrew Tetlaw
+ * Version 1.2 (2006-06-19)
+ *
+ * http://creativecommons.org/licenses/by-sa/2.5/
+ */
+ -->
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/prototype/1.6.0.3/prototype.js" type="text/javascript"></script>
+ 		<script type="text/javascript" src="signal.js"></script>
+	</head>
+	<body>
+		<div id="container">
+			<script type="text/javascript">
+				// ==== Simple test 1 ====
+				sayHello = function(n) {
+					alert("Hello! " + n);
+				}
+				moron = function(n) {
+					alert(n + " is a stupid head");
+				}
+				Signal.connect(null,'sayHello',null,'moron');
+				// ===== Simple test 2 ====
+				function sayHello2(n) {
+					alert("Hello! " + n);
+				}
+
+				function moron2(n) {
+					alert(n + " is a stupid head");
+				}
+				Signal.connect(null,'sayHello2',null,'moron2');
+				Signal.connect(null,'sayHello2',null,'moron2');
+				Signal.connect(null,'sayHello2',null,'moron2');
+
+				// ==== Simple test 3 ====
+				function sayHello3(n) {
+					alert("Hello! " + n);
+				}
+
+				function moron3(n) {
+					alert(n + " is a stupid head");
+				}
+				function bonehead3(n) {
+					alert(n + " is a bonehead");
+				}
+				function idiot3(n) {
+					alert(n + " is an idiot");
+				}
+				Signal.connect(null,'sayHello3',null,'moron3');
+				Signal.connect(null,'sayHello3',null,'bonehead3');
+				Signal.connect(null,'sayHello3',null,'idiot3');
+
+				// ===== Simple test 4 ====
+				function sayHello4(n) {
+					alert("Hello! " + n);
+				}
+
+				function moron4(n) {
+					alert(n + " is a stupid head");
+					Signal.disconnect(null,'sayHello4',null,'moron4');
+				}
+				Signal.connect(null,'sayHello4',null,'moron4');
+				Signal.connect(null,'sayHello4',null,'moron4');
+				Signal.connect(null,'sayHello4',null,'moron4');
+
+				// ===== Simple test 5 ====
+				function sayHello5(n) {
+					alert("Hello! " + n);
+				}
+
+				function moron5(n) {
+					alert(n + " is a stupid head");
+					Signal.disconnectAll(null,'sayHello5',null,'moron5');
+				}
+				Signal.connect(null,'sayHello5',null,'moron5');
+				Signal.connect(null,'sayHello5',null,'moron5');
+				Signal.connect(null,'sayHello5',null,'moron5');
+
+				// ===== Simple test 6 ====
+				function sayHello6(n) {
+					alert("Hello! " + n);
+				}
+
+				function moron6(n) {
+					alert(n + " is a stupid head");
+				}
+				Signal.connectOnce(null,'sayHello6',null,'moron6');
+				Signal.connectOnce(null,'sayHello6',null,'moron6');
+				Signal.connectOnce(null,'sayHello6',null,'moron6');
+
+				// ===== Simple test 7 ====
+				var o = {};
+				o.sayHello = function(n) {
+					alert("Hello! " + n + " (from object o)");
+				}
+				var m = {};
+				m.moron = function(n) {
+					alert(n + " is a stupid head (from object m)");
+				}
+				Signal.connect(o,'sayHello',m,'moron');
+				
+				// ===== Simple test 8 ====
+				function sayHello8(n) {
+					alert("Hello! " + n);
+				}
+
+				function moron8(n) {
+					alert(n + " is a stupid head");
+				}
+				Signal.connect(null,'sayHello8',null,'moron8', {before:true});
+				
+				// ===== Simple test 9 ====
+				function sayHello9(n) {
+					alert("Hello! " + n);
+				}
+
+				function moron9(n) {
+					alert(n + " is a stupid head");
+				}
+				Signal.connect(null,'sayHello9',null,'moron9', {mutate:function() { return ['smelly ' + arguments[0]] }});
+			</script>
+			<a href="http://tetlaw.id.au/view/blog/signals-and-slots-for-prototype-easy-custom-javascript-events">Dexagogo</a>
+			<h1>Signals and Slots for Prototype: Easy custom javascript events</h1>
+			<h2>Tests</h2>
+			<ol>
+				<li>
+					<a href="#" onclick="sayHello('Fred');return false;">Simple Test 1</a> "hello Fred" should trigger "Fred is a stupid head"</a>
+					<pre><code>
+sayHello = function(n) {
+	alert("Hello! " + n);
+}
+moron = function(n) {
+	alert(n + " is a stupid head");
+}
+Signal.connect(null,'sayHello',null,'moron');
+
+onclick="sayHello('Fred')"
+					</code></pre>
+				</li>
+				<li>
+					<a href="#" onclick="sayHello2('Fred');return false;">Simple Test 2</a> repeated insults about Fred</a>
+					<pre><code>
+Signal.connect(null,'sayHello2',null,'moron2');
+Signal.connect(null,'sayHello2',null,'moron2');
+Signal.connect(null,'sayHello2',null,'moron2');
+					</code></pre>
+				</li>
+				<li><a href="#" onclick="sayHello3('Fred');return false;">Simple Test 3</a> multiple insults about Fred</a>
+					<pre><code>
+Signal.connect(null,'sayHello3',null,'moron3');
+Signal.connect(null,'sayHello3',null,'bonehead3');
+Signal.connect(null,'sayHello3',null,'idiot3');
+					</code></pre>
+				</li>
+				<li><a href="#" onclick="sayHello4('Fred');return false;">Simple Test 4</a> 3 insults about Fred first - 3 then none</a>
+					<pre><code>
+Signal.connect(null,'sayHello4',null,'moron4');
+Signal.connect(null,'sayHello4',null,'moron4');
+Signal.connect(null,'sayHello4',null,'moron4');
+Signal.disconnect(null,'sayHello4',null,'moron4');
+Signal.disconnect(null,'sayHello4',null,'moron4');
+Signal.disconnect(null,'sayHello4',null,'moron4');
+					</code></pre>
+				</li>
+				<li><a href="#" onclick="sayHello5('Fred');return false;">Simple Test 5</a> connect 3 insults about Fred first - only one, then none</a>
+					<pre><code>
+Signal.connect(null,'sayHello5',null,'moron5');
+Signal.connect(null,'sayHello5',null,'moron5');
+Signal.connect(null,'sayHello5',null,'moron5');
+Signal.disconnectAll(null,'sayHello5',null,'moron5');
+					</code></pre>
+				</li>
+				<li><a href="#" onclick="sayHello6('Fred');return false;">Simple Test 6</a> connect 3 insults but only one comes out</a>
+					<pre><code>
+Signal.connectOnce(null,'sayHello6',null,'moron6');
+Signal.connectOnce(null,'sayHello6',null,'moron6');
+Signal.connectOnce(null,'sayHello6',null,'moron6');
+					</code></pre>
+				</li>
+				<li><a href="#" onclick="o.sayHello('Fred');return false;">Simple Test 7</a> connect via objects</a>
+					<pre><code>
+var o = {};
+o.sayHello = function(n) {
+	alert("Hello! " + n + " (from object o)");
+}
+var m = {};
+m.moron = function(n) {
+	alert(n + " is a stupid head (from object m)");
+}
+
+Signal.connect(o,'sayHello',m,'moron');
+
+onclick="o.sayHello('Fred')"
+					</code></pre>
+				</li>
+				<li><a href="#" onclick="sayHello8('Fred');return false;">Simple Test 8</a> connect but the insult comes first using {before:true}</a>
+					<pre><code>
+Signal.connect(null,'sayHello8',null,'moron8', {before:true});
+					</code></pre>
+				</li>
+				<li><a href="#" onclick="sayHello9('Fred');return false;">Simple Test 9</a> connect but the insult is mutated</a>
+					<pre><code>
+Signal.connect(null,'sayHello9',null,'moron9', {mutate:function() { return ['smelly ' + arguments[0]] }});
+					</code></pre>
+				</li>
+			</ol>
+	</body>
+</html>
